@@ -7,50 +7,47 @@ class Produkti:
     def get_total_price(self):
         return self.price*self.quantity
 
-siers = Produkti("Franču siers", 4.99, 45)
-maize = Produkti("Bagete", 2.33, 67)
-
-
 class ShoppingCart(Produkti):
-    def __init__(self, grozs):
-        self.grozs =grozs
-        grozs = [0, 0, 0, 0]
+    def __init__(self, name, price, quantity):
+        super().__init__(name, price, quantity)
 
-    def add_product_to_cart(grozs):
+    izvele = [Produkti("Zilais siers", 4.99, 45), Produkti("Bagete", 2.33, 67)]
 
-        viens = input("Vai Jūs vēlaties ieveitot"+ siers.name +" grozā?")
-        divi = input("Vai Jūs vēlaties ieveitot"+ maize.name +" grozā?")
-        grozs = [0, 0, 0, 0]
+    def add_product_to_cart(izvele):
+
+        viens = input("Vai Jūs vēlaties ieveitot preci '"+ izvele[0].name +"' grozā?")
+        divi = input("Vai Jūs vēlaties ieveitot preci '"+ izvele[1].name +"' grozā?")
+        izvele = []
         if viens == "jā":
-            grozs[0] = siers.price
-            grozs[1] = siers.quantity
+            izvele.extend(izvele[0])
         if divi == "jā":
-            grozs[2] = maize.price
-            grozs[3] = maize.quantity
-        return grozs
+            izvele.extend(izvele[1])
 
         
-    def remove_product_from_cart(grozs):
+    def remove_product_from_cart(izvele):
 
         jaut = input("Vai Jūs vēlaties veikt labojumus (noņemt preci no groza)?")
 
         if jaut == "jā":
-            ok = input("Kuru produktu Jūs vēlaties noņemt? (1 - pirmo, 3 - otro, 5 - abus)")
-            if ok == 1 or ok == 3:
-                grozs.pop(ok-1)
-                grozs.pop(ok)
-            elif ok == 5:
-                grozs = []
+            ok = input("Kuru produktu Jūs vēlaties noņemt? (1 - pirmo, 2 - otro, 3 - abus)")
+            if ok == 1:
+                izvele.remove(izvele[0])
+            elif ok == 2:
+                izvele.remove(izvele[1])
+            elif ok == 3:
+                izvele.remove(izvele[1])
+                izvele.remove(izvele[0])
             else:
                 return("Nepareizi ievadīti dati")
-
         else:
             pass
 
-    def get_total_price(grozs):
-        return grozs[0]*grozs[1] + grozs[2]*grozs[3]
+    def get_total_price(izvele):
+        return izvele[0].price*izvele[0].quantity+izvele[1].price*izvele[1].quantity
 
-ShoppingCart.add_product_to_cart(0)
-ShoppingCart.remove_product_from_cart(0)
-ShoppingCart.get_total_price(0)
+izvele = [Produkti("Zilais siers", 4.99, 45), Produkti("Bagete", 2.33, 67)]
+
+ShoppingCart.add_product_to_cart(izvele)
+ShoppingCart.remove_product_from_cart(izvele)
+ShoppingCart.get_total_price(izvele)
 

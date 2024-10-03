@@ -1,12 +1,13 @@
 class Produkti: #-------------->>Izveido galveno klasi
     def __init__(self, name, price, quantity):
-        self.name = name
+        self.name = str(name)
         self.price = price
         self.quantity = quantity
 
-    def get_total_price(price, quantity):
-        return round(price*quantity, 2) #-------------->>Atgriež preces galējo cenu (preces cena * daudzums) (un noapaļota)
-    
+    def get_total_price1(self):
+        cena= round(self.price*self.quantity, 2) #-------------->>Atgriež preces galējo cenu (preces cena * daudzums) (un noapaļota)
+        print(self.name+": ")
+        print(cena)    
     
     
 class ShoppingCart(Produkti):
@@ -16,7 +17,7 @@ class ShoppingCart(Produkti):
         
     def add_product_to_cart(self, izvele):
         self.cart_list.append(izvele) #-------------->>Pievieno produktu grozam
-        print("Jūs pievienojāt preci: "+ izvele.name)
+        #print("Jūs pievienojāt preci: "+ izvele.name)
 
     def remove_product_from_cart(self, izvele):
         self.cart_list.remove(izvele) #-------------->>Noņem produktu no groza
@@ -50,35 +51,38 @@ class SystemUser:
         self.user_info[2] = info.email
 
     def get_user_info(self):
-        return self.user_info[0]+" ; "+self.user_info[1]+" ; "+self.user_info[2]
+        return "Lietotājvārds: "+self.user_info[0]+" ; Parole: "+self.user_info[1]+" ; E-pasts: "+self.user_info[2]
 
 
 # ↓↓↓↓↓  izveido preču sarakstu
-siers = ShoppingCart("Zilais siers", 4.99, 43)
-maize = ShoppingCart("Bagete", 1.99, 67)
-deserts = ShoppingCart("Makarūni", 9.10, 4)
+siers1 = ShoppingCart("Zilais siers", 4.99, 43)
 
-print(Produkti.get_total_price(siers.price, siers.quantity))
-print(Produkti.get_total_price(maize.price, maize.quantity))
-print(Produkti.get_total_price(deserts.price, deserts.quantity))
+siers = Produkti("Zilais siers", 4.99, 43)
+maize = Produkti("Bagete", 1.99, 67)
+deserts = Produkti("Makarūni", 9.10, 4)
+
+siers.get_total_price1()
+maize.get_total_price1()
+deserts.get_total_price1()
+
 
 # ↓↓↓↓↓ ievieto preces grozā
-siers.add_product_to_cart(siers)
-siers.add_product_to_cart(maize)
-siers.add_product_to_cart(deserts)
+siers1.add_product_to_cart(siers)
+siers1.add_product_to_cart(maize)
+siers1.add_product_to_cart(deserts)
 
 # ↓↓↓↓↓ noņem preci no groza
-siers.remove_product_from_cart(deserts)
+siers1.remove_product_from_cart(deserts)
 
 
 # ↓↓↓↓↓ dabūjam groza sarakstu
-products =siers.get_product_list()
+products =siers1.get_product_list()
 
 #print(len(products))
 #print(products[0].name)
 
 # ↓↓↓↓↓ izrēķinam visa groza sarakstu cenu
-siers.get_total_price(products)
+siers1.get_total_price(products)
 
 # ↓↓↓↓↓ izveidojam jaunu lietotāju
 liet = SystemUser("MIMI", "w0rmSs", "mimi@gmail.com")

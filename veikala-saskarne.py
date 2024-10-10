@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
-from PIL import Image, ImageTk
 from veikals2 import ShoppingCart
 from veikals2 import Produkti
 from tkinter import*
+from PIL import Image, ImageTk
+
 
 class App():
     def __init__(self, master):
@@ -23,10 +24,9 @@ class App():
         self.entry2.grid(row = 2, column = 2, columnspan=6, padx =10, pady=10 )
         self.entry3 = Entry()
         self.entry3.grid(row = 3, column = 2, columnspan=6, padx =10, pady=10 )
-        self.labelremove = Label(text = "Ievadiet produkta numuru,\nko vēlaties noņemt:")
-        self.labelremove.grid(row = 4, column =1, padx =10, pady=10)
         self.removestuff = Entry()
         self.removestuff.grid(row = 4, column = 2, columnspan=6, padx =10, pady=10)
+
 
     def input_label(self):
         self.label = Label(text= "Produkts:")
@@ -38,7 +38,8 @@ class App():
         self.label3 = Label(text= "Daudzums:")
         self.label3.grid(row=3, column=1, padx =10, pady=10)
         #self.label.configure(command=self.cart.add_product_to_cart(self.entry3.get()))
-
+        self.labelremove = Label(text = "Ievadiet produkta numuru,\nko vēlaties noņemt:")
+        self.labelremove.grid(row = 4, column =1, padx =10, pady=10)
 
 
 
@@ -50,7 +51,8 @@ class App():
 
 
     def the_maths(self):
-        if self.entry != None or self.entry2 != None or self.entry3 != None:
+        try:
+            teksts = ""
             self.product = Produkti(self.entry.get(), float(self.entry2.get()), int(self.entry3.get()))
             self.cart_list.append(self.product)
 
@@ -64,10 +66,23 @@ class App():
 
             teksts = "Produktu skaits: "+str(lengthof)+"; Kopējā (groza) summa: "+str(total)
 
-            self.labelout = Label(text = teksts)
-            self.labelout.grid(row=6, column=2, padx =10, pady=10)
-        else: 
-            pass
+            
+        except: 
+            teksts = ""
+            lengthof = len(self.cart_list)
+            total = 0
+            i = 0
+        
+            while i < lengthof:
+                total = total + self.cart_list[i].price*self.cart_list[i].quantity
+                i = i+1
+
+            teksts = "Produktu skaits: "+str(lengthof)+"; Kopējā (groza) summa: "+str(int(total))
+
+    
+        self.labelout = Label(text = "       "+teksts+"       ", bg = 'light gray')
+        self.labelout.grid(row=6, column=2, padx =10, pady=10)
+
         #return teksts
 
     def products_in_my_cart(self):
@@ -75,30 +90,36 @@ class App():
         lengthh = len(self.cart_list)
         texts = " "
         while i < lengthh:         
-            texts = str(i+1)+". produkts: "+self.product.name
+            texts = str(i+1)+". produkts: "+self.cart_list[i].name
             i=i+1
 
-        self.labelis = Label(text = texts)
+        self.labelis = Label(text = texts, bg = 'light gray')
         self.labelis.grid(row=i, column= 3, padx =10, pady=10)
 
     def remove_process(self):
-        num = int(self.removestuff.get())
-        if num != None:
-            x = self.cart_list.pop(num)
+
+        self.num = self.removestuff.get()
+        print(self.num)
+        #self.num = int(self.num)
+        try:
+            x = self.cart_list.pop(int(self.num) -1)
             self.cart_list.remove(x)
-        else:
+            print(self.num)
+        except:
             pass   
 
     def input_stuff(self):
         self.button = Button(text="Ievadīt")
         self.button.grid(row=5, column= 2, padx =10, pady=10 )
-        self.button.configure(command=lambda: [#App.remove_process(self),
-             App.the_maths(self), App.products_in_my_cart(self) ])
+        self.button.configure(command=lambda: [App.remove_process(self), App.the_maths(self), App.products_in_my_cart(self) ])
 
-
-
-    
-
+    def image(self,master):
+        self.image = Image.open("french.jpg")
+        self.image = self.image.resize((350, 250))
+        self.image2 = ImageTk.PhotoImage(self.image)
+ 
+        self.labeli = tk.Label(master, image=self.image2)
+        self.labeli.grid(row=7, column= 2, padx =10, pady=10 )
 
     
 logs = Tk()
@@ -108,7 +129,7 @@ a.input_label()
 #outputs = a.entry_input()
 #a.the_maths(outputs)
 a.input_stuff()
-
+a.image(logs)
 
 
 logs.mainloop()
